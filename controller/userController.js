@@ -2,6 +2,8 @@
 const userModel = require('../models/UserModel')
 const bcrypt = require('bcrypt')
 const passport = require('passport')
+const jwt = require('jsonwebtoken')
+const { SECRET_TOKEN } = require('../config/generalConfig')
 const fecha = require('../utils')
 
 const saveUser = async (req,res)=>{
@@ -18,11 +20,25 @@ const saveUser = async (req,res)=>{
 
 
 		console.log('Registro creado: '+ registro)
-		return res.status(200).json({message: "Usuario creado exitosamente"})
+		return res.status(200).json({code: '00', message: "Usuario creado exitosamente"})
 
 	}catch(err){
-		console.log(err)
-		return res.status(500).json({message: `Error al guardar usuario`, data:err})
+        console.log(err)
+        if(err.code == 11000){
+                var cadena = err.errmsg
+                var termino = "email_1"
+                var posicion = cadena.toLowerCase().indexOf(termino.toLowerCase());
+                if (posicion !== -1)
+                    return res.status(500).json({code: err.code, message: `El Correo electronico ingresado ya existe`})
+
+                return res.status(500).json({code: err.code, message: `El Usuario ingresado ya existe`})
+            } else {
+                return res.status(500).json({code: 12000, message: `El tipo de usuario ingresado no es permitido`})
+            }
+
+            
+                
+		return res.status(500).json({message: `Error al guardar usuario`, data:err.code})
 	}
 }
 
@@ -44,6 +60,19 @@ passport.use('local_login', new LocalStrategy({
                         console.log('ERR: -> ' + err)
                     }
                     if (res) {
+                        const payload = {
+                            Usuario: {
+                                email: user.email,
+                                username: user.username,
+                                permisos: user.rol,
+                                picture: user.fullName,
+                                UltimaSesion: user.lastLogin
+                            }
+                        }
+
+                        const token = jwt.sign(payload, SECRET_TOKEN, {
+                            expiresIn: 60*30
+                        })
                        
                         fechaActual = fecha.hoyFecha()
                         //console.log(fechaActual)
@@ -51,7 +80,7 @@ passport.use('local_login', new LocalStrategy({
                             // Handle any possible database errors
                             if (err) return done(null, false, { message: err });
 
-                            return done(null, user, { message: 'Login exitoso'});
+                            return done(null, user, { message: 'Login exitoso', token: token});
                         })
 
                     } else {
@@ -81,11 +110,35 @@ function getUsuarioByUsername(req,res){
 				UltimaSesion 	: user.lastLogin
 			}
 
-		return res.status(200).json({message: DatosUser})
+		return res.status(200).json({code: '00', message: DatosUser})
 	})
+}
+
+function getAllUsers(req,res){
+    userModel.find({status: 'Activo'}, function (erros, users){
+        if (!users)
+            return res.status(404).json({message: "No se encontraron usuarios"})
+
+        var lstUser = []
+        users.forEach(function (currentValue, index, user){
+            const DatosUser = {
+                usuario         : user[index].username,
+                email           : user[index].email,
+                fullName        : user[index].fullName,
+                rol             : user[index].rol,
+                UltimaSesion    : user[index].lastLogin
+            }
+            lstUser.push(DatosUser)
+        })
+        
+
+        return res.status(200).json({code: '00', message: lstUser})
+
+    })
 }
 
 module.exports = {
 	saveUser,
-	getUsuarioByUsername
+	getUsuarioByUsername,
+    getAllUsers
 }

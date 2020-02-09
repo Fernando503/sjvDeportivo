@@ -5,9 +5,10 @@ function hoyFecha() {
     var dd = hoy.getDate();
     var mm = hoy.getMonth() + 1;
     var yyyy = hoy.getFullYear();
-    var hh = hoy.getHours();
+    var hh = hoy.getHours() - 6;
     var min = hoy.getMinutes();
     var seg = hoy.getSeconds();
+    var ms = hoy.getMilliseconds();
 
     dd = addZero(dd);
     mm = addZero(mm);
@@ -15,7 +16,7 @@ function hoyFecha() {
     min = addZero(min);
     seg = addZero(seg);
 
-    return yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + seg
+    return yyyy + '-' + mm + '-' + dd + 'T' + hh + ':' + min + ':' + seg + '.' + ms
 
 }
 

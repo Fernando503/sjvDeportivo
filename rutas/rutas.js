@@ -3,6 +3,7 @@ const express = require('express')
 const routers = express.Router()
 const userController = require('../controller/userController')
 const passport = require('passport')
+const secury = require('../middleware/rutasProtegidas')
 
 routers.get('/', (req, res) =>{
 	res.status(200).send('<h1><center>Hello SJV</center></h1>')
@@ -19,12 +20,13 @@ routers.post('/auth', (req, res, next) => {
                 if (!user)
                     return res.status(401).json({ message: info.message })
                 else
-                    return res.status(200).json({ message: 'inicio de sesion exitoso' });
+                    return res.status(200).json({ code: '00', message: 'inicio de sesion exitoso', token: info.token });
             });
         })(req, res);
 });
 routers.post('/user/add', userController.saveUser)
-routers.get('/user/getUser', userController.getUsuarioByUsername)
+routers.get('/user/getUser', secury.vJWT, userController.getUsuarioByUsername)
+routers.get('/users', secury.vJWT, userController.getAllUsers)
 
 
 module.exports = routers
