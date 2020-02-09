@@ -1,14 +1,15 @@
-# [SJV Deport](https://prosalud.com)
+# [SJV Deport](https://sjvdeportes.com)
 
 [![Get it on Google Play](http://www.tananaev.com/badges/google-play.svg)]()
 
 ## Overview
 
-SJV Deport, es una aplicación para llevar control y gestión de jornadas de Fútbol 11, Fútbol sala, Volleyball, en el municipio de San José Villanueva, Departamento de La Libertad, El Salvador
+SJV Deport, es una aplicación para llevar control y gestión de jornadas de Fútbol 11, Fútbol sala, Volleyball, en el municipio de San José Villanueva, Departamento de La Libertad, El Salvador.
 
 ## Team
 
 - Téc Fernando Flamenco
+- Téc Nancy López
 
 ## License
 
