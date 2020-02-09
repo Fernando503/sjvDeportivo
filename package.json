@@ -1,0 +1,29 @@
+{
+  "name": "sjv_deportivo",
+  "version": "1.0.0",
+  "description": "Web-app para gestion de eventos deportivos en diferentes disciplinas",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fernando503/sjvDeportivo.git"
+  },
+  "author": "Tec Fernando Flamenco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Fernando503/sjvDeportivo/issues"
+  },
+  "homepage": "https://github.com/Fernando503/sjvDeportivo#readme",
+  "dependencies": {
+    "bcrypt": "^3.0.8",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "mongoose": "^5.8.11",
+    "nodemon": "^2.0.2",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0"
+  }
+}
