@@ -103,11 +103,12 @@ function getUsuarioByUsername(req, res) {
             return res.status(404).json({ message: "No se encontró el usuario" })
 
         const DatosUser = {
-            usuario: user.username,
-            email: user.email,
-            fullName: user.fullName,
-            rol: user.rol,
-            UltimaSesion: user.lastLogin
+            Usuario: user.username,
+            Email: user.email,
+            FullName: user.fullName,
+            Rol: user.rol,
+            UltimaSesion: user.lastLogin,
+            Estado: user.status
         }
 
         return res.status(200).json({ code: '00', message: DatosUser })
@@ -122,11 +123,12 @@ function getAllUsers(req, res) {
         var lstUser = []
         users.forEach(function(currentValue, index, user) {
             const DatosUser = {
-                usuario: user[index].username,
-                email: user[index].email,
-                fullName: user[index].fullName,
-                rol: user[index].rol,
-                UltimaSesion: user[index].lastLogin
+                Usuario: user[index].username,
+                Email: user[index].email,
+                FullName: user[index].fullName,
+                Rol: user[index].rol,
+                UltimaSesion: user[index].lastLogin,
+                Estado: user[index].status
             }
             lstUser.push(DatosUser)
         })

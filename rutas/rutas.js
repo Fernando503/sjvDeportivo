@@ -2,11 +2,12 @@
 const express = require('express')
 const routers = express.Router()
 const userController = require('../controller/userController')
+const equipoController = require('../controller/equipoController')
 const passport = require('passport')
 const secury = require('../middleware/rutasProtegidas')
 
 routers.get('/', (req, res) => {
-    res.status(200).send('<h1><center>Hello SJV</center></h1>')
+    res.status(200).send('<h1><center>SJV Deportes</center></h1>')
 })
 
 routers.post('/auth', (req, res, next) => {
@@ -28,6 +29,14 @@ routers.get('/user/getUser', secury.vJWT, userController.getUsuarioByUsername)
 routers.get('/users', secury.vJWT, userController.getAllUsers)
 routers.put('/user/update', secury.vJWT, userController.updateUser)
 routers.delete('/user/delete', secury.vJWT, userController.deleteUser)
+
+// Rutas para Equipos
+
+routers.post('/team/add', equipoController.saveTeam)
+routers.get('/team/getTeam', secury.vJWT, equipoController.getTeamByName)
+routers.get('/teams', secury.vJWT, equipoController.getAllTeams)
+routers.put('/team/update', secury.vJWT, equipoController.updateTeam)
+routers.delete('/team/delete', secury.vJWT, equipoController.deleteTeam)
 
 
 module.exports = routers
