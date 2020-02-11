@@ -90,7 +90,38 @@ function getAllTeams(req, res) {
 
 function updateTeam(req, res) {
     try {
+        var per = req.decoded.Usuario.permisos
+        if (per == 'Administrador') {
+            teamModel.updateOne({ teamName: req.body.name }, {
+                $set: {
+                    representante: req.body.representante,
+                    players: req.body.jugadores,
+                    avatar: req.body.imagen,
+                    status: req.body.estado
+                }
+            }, (err, Tupdate) => {
+                if (err)
+                    return res.status(500).json({ code: '01', message: 'Ocurrio un error al momento de actualizar los datos' })
 
+                return res.status(200).json({ code: '00', message: 'Los datos del equipo se actualizarón correctamente' })
+            })
+
+        } else if (per == 'AdminClient') {
+            teamModel.updateOne({ teamName: req.body.name }, {
+                $set: {
+                    representante: req.body.representante,
+                    players: req.body.jugadores,
+                    avatar: req.body.imagen
+                }
+            }, (err, Tupdate) => {
+                if (err)
+                    return res.status(500).json({ code: '01', message: 'Ocurrio un error al momento de actualizar los datos' })
+
+                return res.status(200).json({ code: '00', message: 'Los datos del equipo se actualizarón correctamente' })
+            })
+        } else {
+            return res.status(401).json({ code: '401', message: 'No posees autorización para realizar esta acción' })
+        }
     } catch (err) {
         console.log(err)
     }
@@ -100,14 +131,14 @@ function deleteTeam(req, res) {
     try {
         var per = req.decoded.Usuario.permisos
         if (per == 'Administrador' || per == 'AdminClient') {
-            teamModel.updateOne({ teamName: req.body.name }, { $set: {status: 'Desactivado'} }, (err, delet)=>{
-            	if(err)
-            		return res.status(500).json({ code:'01', message: 'Error al eliminar el equipo' })
+            teamModel.updateOne({ teamName: req.body.name }, { $set: { representante: 'Desactivado' } }, (err, delet) => {
+                if (err)
+                    return res.status(500).json({ code: '01', message: 'Error al eliminar el equipo' })
 
-            	return res.status(200).json({ code:'00', message: 'El equipo se elimino correctamente' })
+                return res.status(200).json({ code: '00', message: 'El equipo se elimino correctamente' })
             })
-        }else{
-        	return res.status(401).json({ code: '401', message: 'No posees autorización para realizar la acción' })
+        } else {
+            return res.status(401).json({ code: '401', message: 'No posees autorización para realizar la acción' })
         }
     } catch (err) {
         console.log(err)
