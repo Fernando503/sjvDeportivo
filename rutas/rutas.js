@@ -3,6 +3,7 @@ const express = require('express')
 const routers = express.Router()
 const userController = require('../controller/userController')
 const equipoController = require('../controller/equipoController')
+const jornadaController = require('../controller/jornadaController')
 const passport = require('passport')
 const secury = require('../middleware/rutasProtegidas')
 
@@ -32,11 +33,17 @@ routers.delete('/user/delete', secury.vJWT, userController.deleteUser)
 
 // Rutas para Equipos
 
-routers.post('/team/add', equipoController.saveTeam)
+routers.post('/team/add', secury.vJWT, equipoController.saveTeam)
 routers.get('/team/getTeam', secury.vJWT, equipoController.getTeamByName)
 routers.get('/teams', secury.vJWT, equipoController.getAllTeams)
 routers.put('/team/update', secury.vJWT, equipoController.updateTeam)
 routers.delete('/team/delete', secury.vJWT, equipoController.deleteTeam)
+
+// Rutas para Jornadas
+
+routers.post('/jornada/create', secury.vJWT, jornadaController.createJornada)
+//routers.get('/jornada/getJornada', secury.vJWT, jornadaController.getTeamByName)
+routers.get('/jornadas', secury.vJWT, jornadaController.getAllJornadas)
 
 
 module.exports = routers
