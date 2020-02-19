@@ -132,11 +132,8 @@ const createJornada = async (req, res) => {
 
 function getAllJornadas(req, res) {
     try {
-    	console.log(req.query.cat)
-    	var lstJornadas = []
-        jornadaModel.find({status: 'Activo'}, function callback(err, jor) {
-        	console.log(err)
-        	console.log(jor)
+        var lstJornadas = []
+        jornadaModel.find({ status: 'Activo' }, function callback(err, jor) {
             if (!jor)
                 return res.status(404).json({ code: '404', message: 'No se encontrarón jornadas' })
 
@@ -144,9 +141,9 @@ function getAllJornadas(req, res) {
                 if (req.query.cat != null) {
                     if (jorn[index].cat == req.query.cat) {
                         const DatosJorn = {
-                        	Vuelta: jorn[index].vuelta,
+                            Vuelta: jorn[index].vuelta,
                             Fecha: jorn[index].fechaJornada,
-                            Padido: jorn[index].partido,
+                            Partido: jorn[index].partido,
                             FechaJuego: jorn[index].fechaJuego,
                             Estado: jorn[index].estado
                         }
@@ -175,15 +172,25 @@ function getListOfJornadas(req, res) {
 
 function finalizarJornada(req, res) {
     try {
+        var per = req.decoded.Usuario.permisos
+        if (per == 'Administrador' || per == 'AdminClient' || per == 'Seguidor') {
+            jornadaModel.findOne({ vuelta: req.body.vuelta, fechaJornada: req.body.fecha, partido: req.body.partido }, function callback(err, jorModifi) {
+                console.log(jorModifi._id)
+                jornadaModel.updateOne({ _id: jorModifi._id }, { $set: { estado: req.body.status } }, (err, updateResponse) => {
+                    if (err)
+                        return res.status(500).json({ code: '01', message: 'Error al actualizar estado de la jornada' })
 
+                    console.log(updateResponse)
+                    return res.status(200).json({ code: '00', message: 'Se actualizarón los datos correctamente' })
+                })
+            })
+        } else {
+            return res.status(401).json({ code: '401', message: 'No cuentas con permiso para realizar esta acción' })
+        }
     } catch (err) {
         console.log(err)
         return res.status(500).json({ code: '01', message: 'Ocurrio un error al finalizar la jornada' })
     }
-}
-
-const distinto = (valor, indice, self) => {
-    return self.indexOf(valor) === indice;
 }
 
 

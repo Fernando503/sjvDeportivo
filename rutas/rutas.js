@@ -44,6 +44,7 @@ routers.delete('/team/delete', secury.vJWT, equipoController.deleteTeam)
 routers.post('/jornada/create', secury.vJWT, jornadaController.createJornada)
 //routers.get('/jornada/getJornada', secury.vJWT, jornadaController.getTeamByName)
 routers.get('/jornadas', secury.vJWT, jornadaController.getAllJornadas)
+routers.put('/jornada/finalizar', secury.vJWT, jornadaController.finalizarJornada)
 
 
 module.exports = routers
