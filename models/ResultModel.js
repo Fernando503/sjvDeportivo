@@ -5,17 +5,19 @@ const fecha = require('../utils')
 
 const ResultadoSchema = Schema({
 	jornada: String,
-	fecha: Date,
+	fecha: String,
 	categoria: String,
 	equipoA: [{
+		nombre: String,
 		tarjetas: Schema.Types.Mixed,
-		resultado: Number,
+		resultado: Schema.Types.Mixed,
 		goleadores: Schema.Types.Mixed,
 		status: String
 	}],
 	equipoB: [{
+		nombre: String,
 		tarjetas: Schema.Types.Mixed,
-		resultado: Number,
+		resultado: Schema.Types.Mixed,
 		goleadores: Schema.Types.Mixed,
 		status: String
 	}],
@@ -23,6 +25,7 @@ const ResultadoSchema = Schema({
 		creation: { type: Date, default: fecha.hoyFecha() },
 		createBy: { type: String }
 	}],
+	estado: { type: String },
 	status: { type: String, default: "Activo" }
 })
 
